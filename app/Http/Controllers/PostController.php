@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Post;
+
 class PostController extends Controller
 {
     /**
@@ -14,7 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = DB::table('post')->get();
+        //$posts = DB::table('post')->get();
+		$posts = Post::all();
         return view('post.index', ['posts' => $posts]);
     }
 
@@ -63,7 +66,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $posts = DB::table('post')->where('pid', '=',$id)->first();
+        $posts = DB::table('post')->where('id', '=',$id)->first();
 		return view('post.view', ['post' =>$posts]);
     }
 
@@ -75,7 +78,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-         $post = DB::table('post')->where('pid', '=',$id)->first();
+         $post = DB::table('post')->where('id', '=',$id)->first();
 		 return view('post.form', ['post' => $post]);
     }
 
@@ -88,6 +91,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+		/*
 		$data=array();
 		if($request->input('subject')!="")	
 		{
@@ -98,9 +102,24 @@ class PostController extends Controller
 		{
 			$data['content']=$request->input('content');
 		}
+		
 		$data['uid']=$request->input('uid');
-		$id = DB::table('post')->where('pid',$id)
-            ->update($data);		
+		$id = DB::table('post')->where('id',$id)
+            ->update($data);
+		*/
+		
+		$post = Post::findOrFail($id);
+		if($request->input('subject')!="")	
+		{
+			$post->subject = request('subject');
+		}
+		
+		if($request->input('content')!="")	
+		{
+			//$data['content']=$request->input('content');
+			$post->content = request('content');
+		}
+		$post->save();			
        return redirect('post/index')->with('message', 'Edit Success!');
     }
 
@@ -112,7 +131,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-		DB::table('post')->where('pid',$id)->delete();
+		DB::table('post')->where('id',$id)->delete();
          return redirect('post/index')->with('message', 'Delete Success!');
     }
 	
