@@ -11,7 +11,7 @@
 		@if(empty($post->subject))
 		<form method="POST" action="/post/store">
 		@else
-		<form method="POST" action="/post/update/{{$post->id}}">	
+		<form method="POST" action="/post/update/{{$post->id}}">	 
 		@endif	
 			@csrf
 			 <input type="hidden" id="uid" name="uid" class="form-control" value="{{$post->uid}}" >
