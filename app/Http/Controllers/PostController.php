@@ -46,14 +46,19 @@ class PostController extends Controller
     public function store(Request $request)
     {
 		
-		
+		/*
 		$id = DB::table('post')->insertGetId(
 		[
 		'subject' => $request->input('subject'),
 		'content' => $request->input('content'),
 		'uid' => $request->input('uid'),
 		]
-		);
+		);*/
+		$post = new Post;
+		$post->subject = request('subject');
+		$post->content = request('content');
+		$post->uid = request('uid');
+		$post->save();
 		
        return redirect('post/add')->with('message', 'Add Success!');
     }
@@ -78,7 +83,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-         $post = DB::table('post')->where('id', '=',$id)->first();
+         //$post = DB::table('post')->where('id', '=',$id)->first();
+		 $post = Post::findOrFail($id);
 		 return view('post.form', ['post' => $post]);
     }
 
@@ -131,7 +137,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-		DB::table('post')->where('id',$id)->delete();
+		 //DB::table('post')->where('id',$id)->delete();
+		 $post = Post::where('id',$id)->first();
+		 $post->delete();
          return redirect('post/index')->with('message', 'Delete Success!');
     }
 	
