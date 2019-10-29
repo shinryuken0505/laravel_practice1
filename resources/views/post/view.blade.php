@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Page Title')
 @section('sidebar')
-    @parent 
+    @parent
 
     <br>This is appended to the master sidebar.
 @endsection
